@@ -5,7 +5,7 @@ import os
 api_key = os.getenv('NEWS_API_KEY')
 
 # Initialize the summarization pipeline
-summarizer = pipeline('summarization')
+summarizer = pipeline('summarization', model='facebook/bart-large-cnn', revision='main')
 
 if not api_key:
     raise ValueError("No API key found. Please set the NEWS_API_KEY environment variable.")
