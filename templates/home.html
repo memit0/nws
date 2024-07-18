@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Summaries</title>
+    <title>NWS</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         .article { margin-bottom: 20px; }
@@ -11,10 +11,25 @@
         .summary { margin-top: 10px; }
         .url { margin-top: 10px; font-size: 0.9em; color: blue; text-decoration: none; }
         .url:hover { text-decoration: underline; }
+        .weather { margin-bottom: 20px; }
+        .weather .temp { font-size: 1.2em; font-weight: bold; }
+        .search-bar { margin-bottom: 20px; }
+        .search-bar input[type="text"] { padding: 5px; width: 200px; }
+        .search-bar input[type="submit"] { padding: 5px 10px; }
     </style>
 </head>
 <body>
     <h1>NWS</h1>
+
+    {% if weather %}
+    <div class="weather">
+        <div><strong>Weather in {{ weather.city_name }}</strong></div>
+        <div class="temp">Temperature: {{ weather.temp }}°C</div>
+        <div>Description: {{ weather.weather_description }}</div>
+    </div>
+    <hr>
+    {% endif %}
+
     {% for article in articles %}
     <div class="article">
         <div class="title">{{ article.title }}</div>
