@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Summaries</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .article { margin-bottom: 20px; }
+        .title { font-size: 1.5em; font-weight: bold; }
+        .summary { margin-top: 10px; }
+        .url { margin-top: 10px; font-size: 0.9em; color: blue; text-decoration: none; }
+        .url:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>NWS</h1>
+    {% for article in articles %}
+    <div class="article">
+        <div class="title">{{ article.title }}</div>
+        <div class="summary">{{ article.summary }}</div>
+        <a class="url" href="{{ article.url }}">Read more</a>
+    </div>
+    <hr>
+    {% endfor %}
+</body>
+</html>
