@@ -4,7 +4,7 @@ from transformers import pipeline
 import os
 
 # Initialize the summarization pipeline
-summarizer = pipeline('summarization')
+summarizer = pipeline('summarization', model='facebook/bart-large-cnn', revision='main')
 
 app = Flask(__name__)
 
