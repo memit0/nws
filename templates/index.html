@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>News Summarizer</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>News Summarizer</h1>
+    <div id="news"></div>
+
+    <script>
+      fetch("/news")
+        .then((response) => response.json())
+        .then((articles) => {
+          const newsDiv = document.getElementById("news");
+          for (const article of articles) {
+            const articleDiv = document.createElement("div");
+            articleDiv.className = "article";
+            articleDiv.innerHTML = `
+              <h2><a href="${article.url}" target="_blank">${article.title}</a></h2>
+              <p>${article.summary}</p>
+            `;
+            newsDiv.appendChild(articleDiv);
+          }
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+.article {
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.article h2 {
+  margin: 0 0 5px 0;
+}
