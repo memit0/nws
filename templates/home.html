@@ -4,39 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NWS</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .article { margin-bottom: 20px; }
-        .title { font-size: 1.5em; font-weight: bold; }
-        .summary { margin-top: 10px; }
-        .url { margin-top: 10px; font-size: 0.9em; color: blue; text-decoration: none; }
-        .url:hover { text-decoration: underline; }
-        .weather { margin-bottom: 20px; }
-        .weather .temp { font-size: 1.2em; font-weight: bold; }
-        .search-bar { margin-bottom: 20px; }
-        .search-bar input[type="text"] { padding: 5px; width: 200px; }
-        .search-bar input[type="submit"] { padding: 5px 10px; }
-    </style>
 </head>
 <body>
     <h1>NWS</h1>
-
-    {% if weather %}
-    <div class="weather">
-        <div><strong>Weather in {{ weather.city_name }}</strong></div>
-        <div class="temp">Temperature: {{ weather.temp }}°C</div>
-        <div>Description: {{ weather.weather_description }}</div>
-    </div>
+    <form method="post">
+    </form>
     <hr>
-    {% endif %}
-
     {% for article in articles %}
-    <div class="article">
-        <div class="title">{{ article.title }}</div>
-        <div class="summary">{{ article.summary }}</div>
-        <a class="url" href="{{ article.url }}">Read more</a>
-    </div>
-    <hr>
+        <h2>{{ article.title }}</h2>
+        <p>{{ article.summary }}</p>
+        <a href="{{ article.url }}" target="_blank">Read full article</a>
+        <hr>
     {% endfor %}
 </body>
 </html>
