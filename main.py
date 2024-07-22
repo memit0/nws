@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import requests
 from transformers import pipeline
 import os
@@ -73,8 +73,8 @@ def home():
         
     # Render the template with the articles
     return render_template('home.html', articles=articles, weather=weather_info)
-
-
+    
+    #return jsonify(articles=articles, weather=weather_info)
 
 
 
