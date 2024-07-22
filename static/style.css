@@ -1,12 +1,57 @@
 body {
   font-family: Arial, sans-serif;
+  margin: 20px;
+  background-color: rgb(19, 19, 19);
+  color: rgba(255, 252, 249, 0.959);
 }
 
 .article {
-  border-bottom: 1px solid #ccc;
-  padding: 10px 0;
+  margin-bottom: 20px;
 }
 
-.article h2 {
-  margin: 0 0 5px 0;
+.title {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.summary {
+  margin-top: 10px;
+}
+
+.url {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: rgba(
+    192,
+    193,
+    255,
+    0.973
+  ); /* Use a brighter blue for better contrast */
+  text-decoration: none;
+}
+
+.url:hover {
+  text-decoration: underline;
+}
+
+.weather {
+  margin-bottom: 20px;
+}
+
+.weather .temp {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.search-bar {
+  margin-bottom: 20px;
+}
+
+.search-bar input[type="text"] {
+  padding: 5px;
+  width: 200px;
+}
+
+.search-bar input[type="submit"] {
+  padding: 5px 10px;
 }
