@@ -65,13 +65,17 @@ def home():
                     else:
                         summary_text = "Text too short to summarize."
                 except Exception as e:
-                    summary_text = f"Error summarizing article: {e}"
+                    # Skip articles that cause summarization errors
+                    print(f"Skipping article due to summarization error: {e}")
+                    continue  # Skip this article and proceed with the next one
             else:
                 summary_text = meta_description or "No description available."
 
             articles.append({'title': title, 'summary': summary_text, 'url': url})
 
     return render_template('home.html', articles=articles, search_query=search_query)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
