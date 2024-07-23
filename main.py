@@ -5,6 +5,7 @@ from newspaper import Article
 import os
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your_secret_key'
 
 # Initialize the summarization pipeline
 summarizer = pipeline('summarization')
