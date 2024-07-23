@@ -23,60 +23,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NWS</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
   </head>
   <body>
-    <div class="container">
-      <h1>NWS</h1>
-      <form method="POST">
-        <input type="text" name="search" placeholder="Search for news..." />
-        <input type="submit" value="Search" />
-        <select name="category">
-          <option value="">All Categories</option>
-          <option value="business">Business</option>
-          <option value="entertainment">Entertainment</option>
-          <!-- Add more options for each category -->
-        </select>
-      </form>
+    <h1>NWS</h1>
+    <nav>
+      <a href="/">Home</a> |
+      <a href="/saved_articles">Saved Articles</a>
+    </nav>
+    <form method="post">
+      <input type="text" name="search_query" placeholder="Search for news..." />
+      <input type="submit" value="Search" />
+    </form>
+    <hr />
 
-      {% if weather %}
-      <div class="weather">
-        <div><strong>Weather in {{ weather.city_name }}</strong></div>
-        <div class="temp">Temperature: {{ weather.temp }}°F</div>
-        <div>Description: {{ weather.weather_description }}</div>
-      </div>
-      <hr />
-      {% endif %} {% for article in articles %}
-      <div class="article">
-        <div class="title">{{ article.title }}</div>
-        <div class="summary">{{ article.summary }}</div>
-        <!-- Add the "Save for Later" button here -->
-        <button onclick="saveForLater('{{ article.url }}')">
-          Save for Later
-        </button>
-        <a class="url" href="{{ article.url }}" target="_blank">Read more</a>
-      </div>
-      <hr />
-      {% endfor %}
+    {% if weather %}
+    <div class="weather">
+      <h2>Weather in {{ weather.city_name }}</h2>
+      <p>Temperature: {{ weather.temp }}°F</p>
+      <p>Description: {{ weather.weather_description }}</p>
     </div>
-
-    <!-- Add the JavaScript for the "Save for Later" feature here -->
-    <script>
-      function saveForLater(url) {
-        // Get the current list of saved articles from local storage
-        var savedArticles =
-          JSON.parse(localStorage.getItem("savedArticles")) || [];
-
-        // Add the new article to the list
-        savedArticles.push(url);
-
-        // Save the updated list back to local storage
-        localStorage.setItem("savedArticles", JSON.stringify(savedArticles));
-      }
-    </script>
+    <hr />
+    {% endif %} {% for article in articles %}
+    <h2>{{ article.title }}</h2>
+    <p>{{ article.summary }}</p>
+    <a href="{{ article.url }}" target="_blank">Read full article</a>
+    <form method="post" action="/save_article">
+      <input type="hidden" name="title" value="{{ article.title }}" />
+      <input type="hidden" name="summary" value="{{ article.summary }}" />
+      <input type="hidden" name="url" value="{{ article.url }}" />
+      <input type="submit" value="Save for later" />
+    </form>
+    <hr />
+    {% endfor %}
   </body>
 >>>>>>> d40901f (wip features, adding search function, category function, and possiblly trending topics feature)
 </html>
