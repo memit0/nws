@@ -64,14 +64,13 @@ def home():
             if full_text:
                 try:
                     # Ensure full_text is long enough for summarization
-                    word_count = len(full_text.split())
-                    if word_count > 50:  # Check if text has more than 50 words
-                        max_length = min(150, int(word_count / 2))  # Adjust max_length dynamically
-                        min_length = min(50, max_length)  # Ensure min_length <= max_length
-                        summary = summarizer(full_text, max_length=max_length, min_length=min_length, do_sample=False)
+                    if len(full_text.split()) > 50:  # Check if text has more than 50 words
+                        summary = summarizer(full_text, max_length=150, min_length=50, do_sample=False)
                         summary_text = summary[0]['summary_text']
+                        print(f"Summary: {summary_text}")  # Debug statement
                     else:
-                        summary_text = "Text too short to summarize."
+                        summary_text = full_text  # Use full_text instead of summary
+                        print("Text too short to summarize, using full text.")  # Debug statement
                 except Exception as e:
                     # Skip articles that cause summarization errors
                     print(f"Skipping article due to summarization error: {e}")
@@ -79,7 +78,14 @@ def home():
             else:
                 summary_text = meta_description or "No description available."
 
+
             articles.append({'title': title, 'summary': summary_text, 'url': url})
+    
+    else:
+        print(f"Error fetching news articles: {news_response.text}")  # Debug statement
+
+    print(f"Articles to display: {articles}")  # Debug statement
+
 
     # Fetch Weather Data
     weather_url = 'https://api.weatherbit.io/v2.0/current'
