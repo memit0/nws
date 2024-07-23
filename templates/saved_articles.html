@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saved Articles</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Saved Articles</h1>
+    <nav>
+      <a href="/">Home</a> |
+      <a href="/saved_articles">Saved Articles</a>
+    </nav>
+    <div class="container">
+      <hr />
+      {% for article in articles %}
+      <div class="article">
+        <h2 class="title">{{ article.title }}</h2>
+        <p class="summary">{{ article.summary }}</p>
+        <a class="url" href="{{ article.url }}" target="_blank"
+          >Read full article</a
+        >
+      </div>
+      <hr />
+      {% endfor %}
+    </div>
+  </body>
+</html>

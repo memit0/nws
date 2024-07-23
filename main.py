@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect, url_for
 import requests
 from transformers import pipeline
 from newspaper import Article
@@ -83,7 +83,43 @@ def home():
         print(f"Error fetching news articles: {news_response.text}")  # Debug statement
 
     print(f"Articles to display: {articles}")  # Debug statement
-    return render_template('home.html', articles=articles, search_query=search_query)
+
+
+    # Fetch Weather Data
+    api_key_weather = os.getenv('WEATHER_API_KEY')
+    if not api_key_weather:
+        raise ValueError("No WEATHER_API_KEY found. Please set the WEATHER_API_KEY environment variable.")
+    
+    weather_url = 'https://api.weatherbit.io/v2.0/current'
+    weather_params = {'city': 'New York', 'country': 'US', 'key': api_key_weather, 'units': 'I'}
+    weather_response = requests.get(weather_url, params=weather_params)
+
+    if weather_response.status_code == 200:
+        weather_data = weather_response.json()
+        weather = weather_data['data'][0]
+        weather_info = {
+            'city_name': weather['city_name'],
+            'temp': round(weather['temp']),
+            'weather_description': weather['weather']['description']
+        }
+    else:
+        weather_info = None
+
+    return render_template('home.html', articles=articles, search_query=search_query, weather=weather_info)
+
+@app.route('/save_article', methods=['POST'])
+def save_article():
+    article = request.form.to_dict()
+    if 'saved_articles' not in session:
+        session['saved_articles'] = []
+    session['saved_articles'].append(article)
+    session.modified = True
+    return redirect(url_for('home'))
+
+@app.route('/saved_articles')
+def saved_articles():
+    saved_articles = session.get('saved_articles', [])
+    return render_template('saved_articles.html', articles=saved_articles)
 
 if __name__ == '__main__':
     app.run(debug=True)
