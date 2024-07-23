@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,4 +18,58 @@
         {% endfor %}
     </div>
 </body>
+=======
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NWS</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>NWS</h1>
+    <nav>
+      <a href="/">Home</a> |
+      <a href="/saved_articles">Saved Articles</a>
+    </nav>
+    <div class="container">
+      <form method="post" class="search-bar">
+        <input
+          type="text"
+          name="search_query"
+          placeholder="Search for news..."
+        />
+        <input type="submit" value="Search" />
+      </form>
+      <hr />
+
+      {% if weather %}
+      <div class="weather">
+        <h2>Weather in {{ weather.city_name }}</h2>
+        <p class="temp">Temperature: {{ weather.temp }}°F</p>
+        <p>{{ weather.weather_description }}</p>
+      </div>
+      <hr />
+      {% endif %} {% for article in articles %}
+      <div class="article">
+        <h2 class="title">{{ article.title }}</h2>
+        <p class="summary">{{ article.summary }}</p>
+        <a class="url" href="{{ article.url }}" target="_blank"
+          >Read full article</a
+        >
+        <form method="post" action="/save_article">
+          <input type="hidden" name="title" value="{{ article.title }}" />
+          <input type="hidden" name="summary" value="{{ article.summary }}" />
+          <input type="hidden" name="url" value="{{ article.url }}" />
+          <input type="submit" value="Save for later" />
+        </form>
+      </div>
+      <hr />
+      {% endfor %}
+    </div>
+  </body>
+>>>>>>> d40901f (wip features, adding search function, category function, and possiblly trending topics feature)
 </html>
