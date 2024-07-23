@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'supersecretkey')  # Set a secret key for sessions
 
 # Initialize the summarization pipeline
-summarizer = pipeline('summarization', model="facebook/bart-large-cnn")
+summarizer = pipeline('summarization')
 
 # List of friendly news sources (example sources, replace with your actual list)
 friendly_sources = [
