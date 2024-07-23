@@ -35,6 +35,7 @@ def scrape_article_text(url):
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
+    print("Entered home route")  # Debug statement
     api_key_news = os.getenv('NEWS_API_KEY')
     if not api_key_news:
         raise ValueError("No NEWS_API_KEY found. Please set the NEWS_API_KEY environment variable.")
@@ -47,14 +48,18 @@ def home():
         'apiKey': api_key_news
     }
     news_response = requests.get(news_url, params=news_params)
+    print(f"News API response status code: {news_response.status_code}")  # Debug statement
 
     articles = []
     if news_response.status_code == 200:
         news_data = news_response.json()
+        print(f"News data received: {news_data}")  # Debug statement
         for article in news_data['articles']:
             title = article['title']
             url = article['url']
+            print(f"Processing article: {title}, {url}")  # Debug statement
             full_text, meta_description = scrape_article_text(url)
+            print(f"Full text scraped: {full_text[:100]}...")  # Debug statement
 
             if full_text:
                 try:
@@ -62,8 +67,10 @@ def home():
                     if len(full_text.split()) > 50:  # Check if text has more than 50 words
                         summary = summarizer(full_text, max_length=150, min_length=50, do_sample=False)
                         summary_text = summary[0]['summary_text']
+                        print(f"Summary: {summary_text}")  # Debug statement
                     else:
-                        summary_text = "Text too short to summarize."
+                        summary_text = full_text  # Use full_text instead of summary
+                        print("Text too short to summarize, using full text.")  # Debug statement
                 except Exception as e:
                     # Skip articles that cause summarization errors
                     print(f"Skipping article due to summarization error: {e}")
@@ -72,10 +79,11 @@ def home():
                 summary_text = meta_description or "No description available."
 
             articles.append({'title': title, 'summary': summary_text, 'url': url})
+    else:
+        print(f"Error fetching news articles: {news_response.text}")  # Debug statement
 
+    print(f"Articles to display: {articles}")  # Debug statement
     return render_template('home.html', articles=articles, search_query=search_query)
-
-
 
 if __name__ == '__main__':
     app.run(debug=True)
