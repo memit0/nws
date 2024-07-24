@@ -1,41 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NWS</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .article { margin-bottom: 20px; }
-        .title { font-size: 1.5em; font-weight: bold; }
-        .summary { margin-top: 10px; }
-        .url { margin-top: 10px; font-size: 0.9em; color: blue; text-decoration: none; }
-        .url:hover { text-decoration: underline; }
-        .weather { margin-bottom: 20px; }
-        .weather .temp { font-size: 1.2em; font-weight: bold; }
-        .search-bar { margin-bottom: 20px; }
-        .search-bar input[type="text"] { padding: 5px; width: 200px; }
-        .search-bar input[type="submit"] { padding: 5px 10px; }
-    </style></head>
-<body>
-    <h1>NWS</h1>
+    <link
+    link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>NWS</h1>
+      <form method="POST">
+        <input type="text" name="search" placeholder="Search for news..." />
+        <input type="submit" value="Search" />
+        <select name="category">
+          <option value="">All Categories</option>
+          <option value="business">Business</option>
+          <option value="entertainment">Entertainment</option>
+          <!-- Add more options for each category -->
+        </select>
+      </form>
 
-    {% if weather %}
-    <div class="weather">
+      {% if weather %}
+      <div class="weather">
         <div><strong>Weather in {{ weather.city_name }}</strong></div>
-        <div class="temp">Temperature: {{ weather.temp }}°C</div>
+        <div class="temp">Temperature: {{ weather.temp }}°F</div>
         <div>Description: {{ weather.weather_description }}</div>
-    </div>
-    <hr>
-    {% endif %}
-
-    {% for article in articles %}
-    <div class="article">
+      </div>
+      <hr />
+      {% endif %} {% for article in articles %}
+      <div class="article">
         <div class="title">{{ article.title }}</div>
         <div class="summary">{{ article.summary }}</div>
-        <a class="url" href="{{ article.url }}">Read more</a>
+        <!-- Add the "Save for Later" button here -->
+        <button onclick="saveForLater('{{ article.url }}')">
+          Save for Later
+        </button>
+        <a class="url" href="{{ article.url }}" target="_blank">Read more</a>
+      </div>
+      <hr />
+      {% endfor %}
     </div>
-    <hr>
-    {% endfor %}
-</body>
+
+    <!-- Add the JavaScript for the "Save for Later" feature here -->
+    <script>
+      function saveForLater(url) {
+        // Get the current list of saved articles from local storage
+        var savedArticles =
+          JSON.parse(localStorage.getItem("savedArticles")) || [];
+
+        // Add the new article to the list
+        savedArticles.push(url);
+
+        // Save the updated list back to local storage
+        localStorage.setItem("savedArticles", JSON.stringify(savedArticles));
+      }
+    </script>
+  </body>
 </html>
