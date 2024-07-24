@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, jsonify, request, session, redirect, url_for
+import flask_mysql import MySQL
 import requests
 from transformers import pipeline
 from newspaper import Article
@@ -8,7 +9,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
 
 # Initialize the summarization pipeline
-summarizer = pipeline('summarization')
+summarizer = pipeline('summarization', model='facebook/bart-large-cnn', revision='main')
 
 # List of friendly news sources (example sources, replace with your actual list)
 friendly_sources = [
@@ -18,6 +19,26 @@ friendly_sources = [
     'techcrunch',
     # Add other sources you have identified
 ]
+
+#MySQL Configuration
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'app_users'
+
+mysql = MySQL(app)
+
+@app.route('/form_login', methods=['POST','GET'])
+def login():
+    email = request.form[email]
+    password = request.form[password]
+
+    if not email or not password:
+        return render_template('login.html', message='Please enter your email and password.')
+    else:
+        #come back to this
+        return render_template('login.html')
+
 
 # Function to scrape full text and meta description of an article using newspaper3k
 def scrape_article_text(url):
@@ -33,6 +54,7 @@ def scrape_article_text(url):
         print(f"Error scraping article from URL: {url}")
         print(f"Exception: {e}")
         return None, None
+
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -105,8 +127,15 @@ def home():
         }
     else:
         weather_info = None
+        
+    # Render the template with the articles
+    if 'username' in sessions:
+        return render_template('home.html', username=session['username'], articles=articles, search_query=search_query, weather=weather_info)
+    else:
+        return render_template('home.html', articles=articles, search_query=search_query, weather=weather_info)
+    
+    #return jsonify(articles=articles, weather=weather_info)
 
-    return render_template('home.html', articles=articles, search_query=search_query, weather=weather_info)
 
 @app.route('/save_article', methods=['POST'])
 def save_article():
