@@ -1,4 +1,5 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
+import flask_mysql import MySQL
 import requests
 from transformers import pipeline
 import os
@@ -7,6 +8,26 @@ import os
 summarizer = pipeline('summarization', model='facebook/bart-large-cnn', revision='main')
 
 app = Flask(__name__)
+
+#MySQL Configuration
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'app_users'
+
+mysql = MySQL(app)
+
+@app.route('/form_login', methods=['POST','GET'])
+def login():
+    email = request.form[email]
+    password = request.form[password]
+
+    if not email or not password:
+        return render_template('login.html', message='Please enter your email and password.')
+    else:
+        #come back to this
+        return render_template('login.html')
+
 
 @app.route('/')
 def home():
@@ -72,7 +93,10 @@ def home():
         weather_info = None
         
     # Render the template with the articles
-    return render_template('home.html', articles=articles, weather=weather_info)
+    if 'username' in sessions:
+        return render_template('home.html', username=session['username'], articles=articles, weather=weather_info)
+    else:
+        return render_template('home.html', articles=articles, weather=weather_info)
     
     #return jsonify(articles=articles, weather=weather_info)
 
