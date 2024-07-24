@@ -11,23 +11,39 @@
     />
   </head>
   <body>
-    <h1>Saved Articles</h1>
     <nav>
-      <a href="/">Home</a> |
+      <a href="/" class="logo">NWS</a>
+      <div class="search-container">
+        <span class="search-icon">&#128269;</span>
+        <form method="post" class="search-bar">
+          <input
+            type="text"
+            name="search_query"
+            placeholder="Search for news..."
+          />
+          <input type="submit" value="Search" />
+        </form>
+      </div>
+      <span class="weather-info">
+        {{ weather.city_name }} | {{ weather.temp }}°F
+      </span>
+      <a href="/">Home</a>
       <a href="/saved_articles">Saved Articles</a>
     </nav>
+    <h1>Saved Articles</h1>
     <div class="container">
-      <hr />
-      {% for article in articles %}
+      {% if articles %} {% for article in articles %}
       <div class="article">
         <h2 class="title">{{ article.title }}</h2>
         <p class="summary">{{ article.summary }}</p>
-        <a class="url" href="{{ article.url }}" target="_blank"
-          >Read full article</a
-        >
+        <a class="url" href="{{ article.url }}" target="_blank">
+          Read full article
+        </a>
       </div>
       <hr />
-      {% endfor %}
+      {% endfor %} {% else %}
+      <p>No saved articles.</p>
+      {% endif %}
     </div>
   </body>
 </html>

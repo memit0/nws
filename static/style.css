@@ -15,8 +15,12 @@ h2 {
 nav {
   background-color: #333;
   color: white;
-  padding: 15px;
+  padding: 10px 15px;
   text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 nav a {
@@ -29,67 +33,41 @@ nav a:hover {
   text-decoration: underline;
 }
 
-.container {
-  margin: 20px;
+.search-container {
+  position: relative;
+  margin-left: auto; /* Aligns the search bar to the right */
 }
 
-.article {
-  margin-bottom: 20px;
-  padding: 15px;
-  background-color: #262626;
-  border: 1px solid #444;
-  border-radius: 5px;
-}
-
-.title {
-  font-size: 1.5em;
-  font-weight: bold;
-}
-
-.summary {
-  margin-top: 10px;
-}
-
-.url {
-  margin-top: 10px;
-  font-size: 0.9em;
-  color: rgba(
-    192,
-    193,
-    255,
-    0.973
-  ); /* Use a brighter blue for better contrast */
-  text-decoration: none;
-}
-
-.url:hover {
-  text-decoration: underline;
-}
-
-.weather {
-  margin-bottom: 20px;
-  padding: 10px;
-  background-color: #333;
-  border-radius: 5px;
-  text-align: center;
-}
-
-.weather .temp {
-  font-size: 1em;
-  font-weight: bold;
+.search-icon {
+  cursor: pointer;
+  font-size: 20px;
 }
 
 .search-bar {
-  margin-bottom: 20px;
-  text-align: center;
+  display: none;
+  position: absolute;
+  top: 100%; /* Positions the search bar just below the taskbar */
+  right: 0; /* Aligns the search bar to the right */
+  background-color: #444;
+  padding: 10px;
+  border-radius: 5px;
+  width: 200px;
+  z-index: 1000; /* Ensures the search bar appears above other elements */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow for better visibility */
+}
+
+.search-container:hover .search-bar {
+  display: block;
 }
 
 .search-bar input[type="text"] {
   padding: 10px;
-  width: 300px;
-  margin-right: 10px;
+  width: calc(
+    100% - 22px
+  ); /* Adjust width to fit inside the search bar with padding */
   border: 1px solid #444;
   border-radius: 5px;
+  box-sizing: border-box; /* Includes padding and border in element’s total width and height */
 }
 
 .search-bar input[type="submit"] {
@@ -105,8 +83,89 @@ nav a:hover {
   background-color: #555;
 }
 
-form {
+.bookmark {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.weather-info {
+  font-size: 14px; /* Small font size for temperature */
+}
+
+.container {
+  margin: 60px auto; /* Increased margin for more whitespace around the container */
+  padding: 40px; /* Increased padding to the container */
+  max-width: 850px; /* Optional: Constrain the container width for better layout */
+}
+
+.article {
+  margin-bottom: 40px; /* Increased bottom margin to add more space between articles */
+  padding: 25px; /* Increased padding inside the article */
+  background-color: #262626;
+  border: 1px solid #444;
+  border-radius: 5px;
+  position: relative;
+}
+
+.title {
+  font-size: 1em; /* Same font size as the summary */
+  font-weight: bold;
+}
+
+.summary {
+  font-size: 1em; /* Ensure both title and summary have the same font size */
+  margin-top: 10px;
+}
+
+.url {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: rgba(192, 193, 255, 0.973);
+  text-decoration: none;
+  border: 2px solid rgba(192, 193, 255, 0.973);
+  border-radius: 5px;
+  padding: 5px;
+  display: inline-block;
+}
+
+.url:hover {
+  background-color: rgba(192, 193, 255, 0.1);
+  text-decoration: none;
+}
+
+.weather {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #333;
+  border-radius: 5px;
   text-align: center;
+}
+
+.weather .temp {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.search-bar input[type="text"] {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #444;
+  border-radius: 5px;
+}
+
+.search-bar input[type="submit"] {
+  padding: 10px 20px;
+  background-color: #444;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-bar input[type="submit"]:hover {
+  background-color: #555;
 }
 
 hr {
