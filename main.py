@@ -1,5 +1,5 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
-import flask_mysql import MySQL
+from flask_mysqldb import MySQL
 import requests
 from transformers import pipeline
 from newspaper import Article
@@ -134,7 +134,7 @@ def home():
     else:
         return render_template('home.html', articles=articles, search_query=search_query, weather=weather_info)
     
-    #return jsonify(articles=articles, weather=weather_info)
+    return render_template('home.html', articles=articles, search_query=search_query, weather=weather_info)
 
 
 @app.route('/save_article', methods=['POST'])
