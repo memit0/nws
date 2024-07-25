@@ -16,6 +16,7 @@
       <a href="/">Home</a> |
       <a href="/saved_articles">Saved Articles</a>
     </nav>
+    {% if username %}
     <div class="container">
       <hr />
       {% for article in articles %}
@@ -29,5 +30,9 @@
       <hr />
       {% endfor %}
     </div>
+    {% else %}
+    <h2>You must be logged in to view saved articles.</h2>
+    <p>Please <a href="/form_login">login</a> to access saved articles.</p>
+    {% endif %}
   </body>
 </html>
