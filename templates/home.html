@@ -6,53 +6,58 @@
     <title>NWS</title>
     <link
       rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='style.css') }}"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+    />
+    <link
+    rel="stylesheet"
+    type="text/css"
+    href="{{ url_for('static', filename='style.css') }}"
     />
   </head>
   <body>
-    <h1>NWS</h1>
-    <nav>
-      <a href="/">Home</a> |
-      <a href="saved_articles">Saved Articles</a>
-      <a href="login">Login</a>
-      <a href="register">Register</a>
-    </nav>
-    <div class="container">
-      <form method="post" class="search-bar">
-        <input
-          type="text"
-          name="search_query"
-          placeholder="Search for news..."
-        />
-        <input type="submit" value="Search" />
-      </form>
-      <hr />
-
-      {% if weather %}
-      <div class="weather">
-        <h2>Weather in {{ weather.city_name }}</h2>
-        <p class="temp">Temperature: {{ weather.temp }}°F</p>
-        <p>{{ weather.weather_description }}</p>
+      <nav>
+        <span class="logo">NWS</span>
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="saved_articles">Saved Articles</a>
+          <a href="login">Login</a>
+          <a href="register">Register</a>
+          <div class="search-container">
+            <span class="search-icon">&#128269;</span>
+            <form method="post" class="search-bar">
+              <input
+                type="text"
+                name="search_query"
+                placeholder="Search for news..."
+              />
+              <input type="submit" value="Search" />
+            </form>
+          </div>
+          <span class="weather-info">
+            {{ weather.city_name }} | {{ weather.temp }}°F
+          </span>
+        </div>
+      </nav>
+      <div class="container">
+        {% for article in articles %}
+        <div class="article">
+          <h2 class="title">{{ article.title }}</h2>
+          <p class="summary">{{ article.summary }}</p>
+          <a class="url" href="{{ article.url }}" target="_blank"
+            >Read full article</a
+          >
+          <button
+            class="bookmark"
+            data-title="{{ article.title }}"
+            data-summary="{{ article.summary }}"
+            data-url="{{ article.url }}"
+          >
+            &#9733;
+          </button>
+        </div>
+        <hr />
+        {% endfor %}
       </div>
-      <hr />
-      {% endif %} {% for article in articles %}
-      <div class="article">
-        <h2 class="title">{{ article.title }}</h2>
-        <p class="summary">{{ article.summary }}</p>
-        <a class="url" href="{{ article.url }}" target="_blank"
-          >Read full article</a
-        >
-        <form method="post" action="/save_article">
-          <input type="hidden" name="title" value="{{ article.title }}" />
-          <input type="hidden" name="summary" value="{{ article.summary }}" />
-          <input type="hidden" name="url" value="{{ article.url }}" />
-          <input type="submit" value="Save for later" />
-        </form>
-      </div>
-      <hr />
-      {% endfor %}
-    </div>
-  </body>
-</html>
-
+      <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    </body>
+  </html>
