@@ -1,11 +1,14 @@
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from flask_mysqldb import MySQL
-import requests
+from flask_bcrypt import Bcrypt
+import requests, re
+import MySQLdb.cursors
 from transformers import pipeline
 from newspaper import Article
 import os
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 app.config['SECRET_KEY'] = 'your_secret_key'
 
 # Initialize the summarization pipeline
@@ -30,15 +33,62 @@ mysql = MySQL(app)
 
 @app.route('/form_login', methods=['POST','GET'])
 def login():
-    email = request.form[email]
-    password = request.form[password]
+    if request.method=='POST' and 'username' in request.form and 'password' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password))
+        account = cursor.fetchone()
 
-    if not email or not password:
-        return render_template('login.html', message='Please enter your email and password.')
+        if account:
+            session['loggedin'] = True
+            session['id'] = account['id']
+            session['username'] = account['username']
+            message = 'Logged in successfully'
+            return redirect(url_for('home'), message=message)
+        else:
+            return render_template('login.html', error='Invalid username or password.')
     else:
-        #come back to this
         return render_template('login.html')
+    
+    # email = request.form[email]
+    # password = request.form[password]
 
+    # if not email or not password:
+    #     return render_template('login.html', message='Please enter your email and password.')
+    # else:
+    #     #come back to this
+    #     return render_template('login.html')
+
+@app.route('/form_register', methods=['POST', 'GET'])
+def register():
+    message = ''
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        email = request.form['email']
+        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute('INSERT INTO users(username, password) VALUES (%s, %s)', (username, password))
+        # mysql.connection.commit()
+        cursor.execute('SELECT * FROM users WHERE username = %s', (username, ))
+        account = cursor.fetchone()
+        if account:
+            message = 'Account already exists'
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            return render_template('register.html', error='Invalid email address')
+        elif not re.match(r'[A-Za-z0-9]+', username):
+            # return render_template('register.html', error='Username must contain only characters and numbers')
+            message = 'Username must contain only characters and numbers'
+        elif not username or not password or not email:
+            message = 'Please fill out the form'
+        else:
+            cursor.execuute('INSERT INTO users(username, password, email) VALUES (%s, %s, %s)', (username, hashed_password, email))
+            mysql.connection.commit()
+            message='You have successfully registered your account.'
+    elif request.method == 'POST':
+        message = 'Please fill out form.'
+    return render_template('register.html', message=message)
 
 # Function to scrape full text and meta description of an article using newspaper3k
 def scrape_article_text(url):
@@ -128,11 +178,11 @@ def home():
     else:
         weather_info = None
         
-    # Render the template with the articles
-    if 'username' in sessions:
-        return render_template('home.html', username=session['username'], articles=articles, search_query=search_query, weather=weather_info)
-    else:
-        return render_template('home.html', articles=articles, search_query=search_query, weather=weather_info)
+    # # Render the template with the articles
+    # if 'username' in sessions:
+    #     return render_template('home.html', username=session['username'], articles=articles, search_query=search_query, weather=weather_info)
+    # else:
+    #     return render_template('home.html', articles=articles, search_query=search_query, weather=weather_info)
     
     return render_template('home.html', articles=articles, search_query=search_query, weather=weather_info)
 
