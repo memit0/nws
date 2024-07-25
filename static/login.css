@@ -1,40 +1,129 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: rgb(19, 19, 19);
-    color: rgba(255, 252, 249, 0.959);
-  }
+  font-family: "Roboto", Arial, sans-serif; /* Added Roboto font */
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f5; /* Off-white bluish color */
+  color: #333333; /* Dark grey color */
+}
 
-.error {
-    color: red;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 10px;
-  }
+h1,
+h2 {
+  color: #333333; /* Dark grey color */
+  text-align: center;
+}
 
-  h1,
-  h2 {
-    color: #fff;
-    text-align: center;
-  }
-  
-  nav {
-    background-color: #333;
-    color: white;
-    padding: 15px;
-    text-align: center;
-  }
+nav {
+  background-color: #f0f0f5; /* Same as body background color */
+  color: #333333; /* Dark grey color */
+  padding: 10px 15px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+nav .logo {
+  font-size: 24px; /* Adjust as needed */
+  font-weight: bold;
+  color: #333333; /* Dark grey color */
+}
+
+nav .nav-links {
+  display: flex;
+  align-items: center;
+}
+
+nav .nav-links a {
+  color: #333333; /* Dark grey color */
+  text-decoration: none;
+  margin: 0 15px;
+}
+
+nav .nav-links a:hover {
+  text-decoration: underline;
+}
+
+nav .search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-left: 15px; /* Adjust spacing between Search Icon and Search Bar */
+}
+
+nav .search-icon {
+  cursor: pointer;
+  font-size: 20px;
+  margin-right: 10px; /* Adjust spacing between Search Icon and Search Bar */
+}
+
+nav .search-bar {
+  display: none;
+  position: absolute;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #e0e0eb; /* Slightly darker bluish color */
+  padding: 10px;
+  border-radius: 5px;
+  width: 200px;
+  z-index: 1000; /* Ensure search bar appears above other content */
+}
+
+nav .search-container.hover .search-bar,
+nav .search-bar.hover {
+  display: block;
+}
+
+nav .weather-info {
+  font-size: 14px; /* Adjust font size for temperature */
+  margin-left: 15px; /* Adjust spacing between Search Bar and Temperature */
+}
+
+.container {
+  margin: 60px auto; /* Increased margin for more whitespace around the container */
+  padding: 40px; /* Increased padding to the container */
+  max-width: 850px; /* Optional: Constrain the container width for better layout */
+}
+
+.url {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #6666cc; /* Bluish color for links */
+  text-decoration: none;
+  border: 2px solid #6666cc; /* Bluish color for border */
+  border-radius: 5px;
+  padding: 5px;
+  display: inline-block;
+}
+
+.url:hover {
+  background-color: #e0e0eb; /* Slightly darker bluish color for hover */
+  text-decoration: none;
+}
+
+.logo {
+  font-size: 24px; /* Adjust as needed */
+  font-weight: bold;
+  color: #333333; /* Dark grey color */
+}
 
 .btn {
   width: 100%;
-  padding: 15px;
+  padding: 10px;
   font-size: 18px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  background-color: #007bff;
+  background-color: #6666cc;
   color: white;
   transition: background-color 0.3s ease;
 }
+
+.error {
+  color: red;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+}
+
