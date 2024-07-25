@@ -7,17 +7,18 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href="login.html"
+      href="{{ url_for('static', filename='style.css') }}"
     />
 </head>
 <body>
     <h1>Register</h1>
     <div class="container">
         <nav>
-            <a href="/">Home</a>
+            <a href="/">Home</a> |
+            <a href="register">Register</a>
         </nav>
         <div class="row" style="margin-top: 40px">    
-                <form method="POST" action="/form_register">
+                <form method="POST" action="/register">
                     {% if message %}
                     <div class="message">{{ message }}</div>
                     {% endif %}
