@@ -31,7 +31,7 @@ app.config['MYSQL_DB'] = 'app_users'
 
 mysql = MySQL(app)
 
-@app.route('/form_login', methods=['POST','GET'])
+@app.route('/login', methods=['POST','GET'])
 def login():
     if request.method=='POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
@@ -51,7 +51,7 @@ def login():
     else:
         return render_template('login.html')
     
-    # email = request.form[email]
+    # email = request[email]
     # password = request.form[password]
 
     # if not email or not password:
@@ -60,7 +60,7 @@ def login():
     #     #come back to this
     #     return render_template('login.html')
 
-@app.route('/form_register', methods=['POST', 'GET'])
+@app.route('/register', methods=['POST', 'GET'])
 def register():
     message = ''
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
