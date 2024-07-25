@@ -1,20 +1,20 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Roboto", Arial, sans-serif; /* Added Roboto font */
   margin: 0;
   padding: 0;
-  background-color: rgb(19, 19, 19);
-  color: rgba(255, 252, 249, 0.959);
+  background-color: #f0f0f5; /* Off-white bluish color */
+  color: #333333; /* Dark grey color */
 }
 
 h1,
 h2 {
-  color: #fff;
+  color: #333333; /* Dark grey color */
   text-align: center;
 }
 
 nav {
-  background-color: #333;
-  color: white;
+  background-color: #f0f0f5; /* Same as body background color */
+  color: #333333; /* Dark grey color */
   padding: 10px 15px;
   text-align: center;
   position: relative;
@@ -23,75 +23,61 @@ nav {
   align-items: center;
 }
 
-nav a {
-  color: white;
+nav .logo {
+  font-size: 24px; /* Adjust as needed */
+  font-weight: bold;
+  color: #333333; /* Dark grey color */
+}
+
+nav .nav-links {
+  display: flex;
+  align-items: center;
+}
+
+nav .nav-links a {
+  color: #333333; /* Dark grey color */
   text-decoration: none;
   margin: 0 15px;
 }
 
-nav a:hover {
+nav .nav-links a:hover {
   text-decoration: underline;
 }
 
-.search-container {
+nav .search-container {
+  display: flex;
+  align-items: center;
   position: relative;
-  margin-left: auto; /* Aligns the search bar to the right */
+  margin-left: 15px; /* Adjust spacing between Search Icon and Search Bar */
 }
 
-.search-icon {
+nav .search-icon {
   cursor: pointer;
   font-size: 20px;
+  margin-right: 10px; /* Adjust spacing between Search Icon and Search Bar */
 }
 
-.search-bar {
+nav .search-bar {
   display: none;
   position: absolute;
-  top: 100%; /* Positions the search bar just below the taskbar */
-  right: 0; /* Aligns the search bar to the right */
-  background-color: #444;
+  top: 35px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #e0e0eb; /* Slightly darker bluish color */
   padding: 10px;
   border-radius: 5px;
   width: 200px;
-  z-index: 1000; /* Ensures the search bar appears above other elements */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds shadow for better visibility */
+  z-index: 1000; /* Ensure search bar appears above other content */
 }
 
-.search-container:hover .search-bar {
+nav .search-container.hover .search-bar,
+nav .search-bar.hover {
   display: block;
 }
 
-.search-bar input[type="text"] {
-  padding: 10px;
-  width: calc(
-    100% - 22px
-  ); /* Adjust width to fit inside the search bar with padding */
-  border: 1px solid #444;
-  border-radius: 5px;
-  box-sizing: border-box; /* Includes padding and border in element’s total width and height */
-}
-
-.search-bar input[type="submit"] {
-  padding: 10px 20px;
-  background-color: #444;
-  color: white;
-  border: 1px solid #444;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.search-bar input[type="submit"]:hover {
-  background-color: #555;
-}
-
-.bookmark {
-  border: none;
-  background: none;
-  cursor: pointer;
-  font-size: 24px;
-}
-
-.weather-info {
-  font-size: 14px; /* Small font size for temperature */
+nav .weather-info {
+  font-size: 14px; /* Adjust font size for temperature */
+  margin-left: 15px; /* Adjust spacing between Search Bar and Temperature */
 }
 
 .container {
@@ -103,8 +89,8 @@ nav a:hover {
 .article {
   margin-bottom: 40px; /* Increased bottom margin to add more space between articles */
   padding: 25px; /* Increased padding inside the article */
-  background-color: #262626;
-  border: 1px solid #444;
+  background-color: #f0f0f5; /* Same as body background color */
+  border: none; /* Remove the border */
   border-radius: 5px;
   position: relative;
 }
@@ -112,33 +98,35 @@ nav a:hover {
 .title {
   font-size: 1em; /* Same font size as the summary */
   font-weight: bold;
+  color: #333333; /* Dark grey color */
 }
 
 .summary {
   font-size: 1em; /* Ensure both title and summary have the same font size */
   margin-top: 10px;
+  color: #333333; /* Dark grey color */
 }
 
 .url {
   margin-top: 10px;
   font-size: 0.9em;
-  color: rgba(192, 193, 255, 0.973);
+  color: #6666cc; /* Bluish color for links */
   text-decoration: none;
-  border: 2px solid rgba(192, 193, 255, 0.973);
+  border: 2px solid #6666cc; /* Bluish color for border */
   border-radius: 5px;
   padding: 5px;
   display: inline-block;
 }
 
 .url:hover {
-  background-color: rgba(192, 193, 255, 0.1);
+  background-color: #e0e0eb; /* Slightly darker bluish color for hover */
   text-decoration: none;
 }
 
 .weather {
   margin-bottom: 20px;
   padding: 10px;
-  background-color: #333;
+  background-color: #d9d9e3; /* Lighter bluish color */
   border-radius: 5px;
   text-align: center;
 }
@@ -150,29 +138,63 @@ nav a:hover {
 
 .search-bar input[type="text"] {
   padding: 10px;
-  width: 100%;
-  border: 1px solid #444;
+  width: calc(
+    100% - 22px
+  ); /* Adjust width to fit inside the search bar with padding */
+  border: 1px solid #cccccc; /* Light grey border */
   border-radius: 5px;
+  box-sizing: border-box; /* Includes padding and border in element’s total width and height */
+  background-color: #ffffff; /* White background for input */
+  color: #333333; /* Dark grey color for text */
 }
 
 .search-bar input[type="submit"] {
   padding: 10px 20px;
-  background-color: #444;
+  background-color: #6666cc; /* Bluish color for button */
   color: white;
-  border: 1px solid #444;
+  border: 1px solid #6666cc; /* Bluish color for border */
   border-radius: 5px;
   cursor: pointer;
 }
 
 .search-bar input[type="submit"]:hover {
-  background-color: #555;
+  background-color: #4d4db3; /* Darker bluish color for hover */
+}
+
+.bookmark {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #6666cc; /* Bluish color for bookmark */
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
 
 hr {
-  border: 1px solid #444;
+  border: none; /* Remove the border */
 }
 
 .weather h2,
 .article h2 {
   margin-top: 0;
+}
+
+.logo {
+  font-size: 24px; /* Adjust as needed */
+  font-weight: bold;
+  color: #333333; /* Dark grey color */
+}
+
+.remove-article {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: bold; /* Make the minus sign thicker */
+  color: #cc6666; /* Reddish color for the minus/dash icon */
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }

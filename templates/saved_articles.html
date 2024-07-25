@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Saved Articles</title>
     <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
       rel="stylesheet"
       type="text/css"
       href="{{ url_for('static', filename='style.css') }}"
@@ -12,38 +16,45 @@
   </head>
   <body>
     <nav>
-      <a href="/" class="logo">NWS</a>
-      <div class="search-container">
-        <span class="search-icon">&#128269;</span>
-        <form method="post" class="search-bar">
-          <input
-            type="text"
-            name="search_query"
-            placeholder="Search for news..."
-          />
-          <input type="submit" value="Search" />
-        </form>
+      <span class="logo">NWS</span>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/saved_articles">Saved Articles</a>
+        <div class="search-container">
+          <span class="search-icon">&#128269;</span>
+          <form method="post" class="search-bar">
+            <input
+              type="text"
+              name="search_query"
+              placeholder="Search for news..."
+            />
+            <input type="submit" value="Search" />
+          </form>
+        </div>
+        <span class="weather-info">
+          {{ weather.city_name }} | {{ weather.temp }}°F
+        </span>
       </div>
-      <span class="weather-info">
-        {{ weather.city_name }} | {{ weather.temp }}°F
-      </span>
-      <a href="/">Home</a>
-      <a href="/saved_articles">Saved Articles</a>
     </nav>
     <h1>Saved Articles</h1>
     <div class="container">
-      {% if articles %} {% for article in articles %}
+      {% for article in articles %}
       <div class="article">
+        <button
+          class="remove-article"
+          data-title="{{ article.title }}"
+          data-url="{{ article.url }}"
+        >
+          &#8211;
+        </button>
         <h2 class="title">{{ article.title }}</h2>
         <p class="summary">{{ article.summary }}</p>
-        <a class="url" href="{{ article.url }}" target="_blank">
-          Read full article
-        </a>
+        <a class="url" href="{{ article.url }}" target="_blank"
+          >Read full article</a
+        >
       </div>
-      <hr />
-      {% endfor %} {% else %}
-      <p>No saved articles.</p>
-      {% endif %}
+      {% endfor %}
     </div>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
   </body>
 </html>

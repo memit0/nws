@@ -42,11 +42,12 @@ def home():
         raise ValueError("No NEWS_API_KEY found. Please set the NEWS_API_KEY environment variable.")
 
     search_query = request.form.get('search_query')
-    news_url = 'https://newsapi.org/v2/everything' if search_query else 'https://newsapi.org/v2/top-headlines'
+    news_url = 'https://newsapi.org/v2/top-headlines' if not search_query else 'https://newsapi.org/v2/everything'
     news_params = {
-        'q': search_query,
-        'sources': ','.join(friendly_sources),  # Filter by friendly sources
-        'apiKey': api_key_news
+        'apiKey': api_key_news,
+        'sources': ','.join(friendly_sources) if not search_query else '',
+        'q': search_query if search_query else '',
+        'language': 'en'
     }
     news_response = requests.get(news_url, params=news_params)
     print(f"News API response status code: {news_response.status_code}")  # Debug statement
@@ -84,7 +85,6 @@ def home():
         print(f"Error fetching news articles: {news_response.text}")  # Debug statement
 
     print(f"Articles to display: {articles}")  # Debug statement
-
 
     # Fetch Weather Data
     api_key_weather = os.getenv('WEATHER_API_KEY')
@@ -143,7 +143,21 @@ def saved_articles():
 
     return render_template('saved_articles.html', articles=saved_articles, weather=weather_info)
 
+@app.route('/remove_article', methods=['POST'])
+def remove_article():
+    article_data = request.get_json()
+    saved_articles = session.get('saved_articles', [])
+
+    # Find the article to remove
+    for article in saved_articles:
+        if article['title'] == article_data['title'] and article['url'] == article_data['url']:
+            saved_articles.remove(article)
+            break
+
+    session['saved_articles'] = saved_articles
+    session.modified = True
+    return '', 204
+
 
 if __name__ == '__main__':
     app.run(debug=True)
-
