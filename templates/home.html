@@ -7,7 +7,7 @@
     <link
       rel="stylesheet"
       type="text/css"
-      href='style.css'
+      href="{{ url_for('static', filename='style.css') }}"
     />
   </head>
   <body>
@@ -15,6 +15,8 @@
     <nav>
       <a href="/">Home</a> |
       <a href="saved_articles">Saved Articles</a>
+      <a href="login">Login</a>
+      <a href="register">Register</a>
     </nav>
     <div class="container">
       <form method="post" class="search-bar">
