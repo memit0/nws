@@ -5,8 +5,17 @@
     <title>Login Page</title>
     <link
       rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='login.css') }}"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+    />
+    <link
+    rel="stylesheet"
+    type="text/css"
+    href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+    rel="stylesheet"
+    type="text/css"
+    href="{{ url_for('static', filename='login.css') }}"
     />
 </head>
 <body>
@@ -19,12 +28,16 @@
     {% if message %}
     <p>{{ message }}</p>
     {% endif %}
-    <br action="/login" method="POST">
-        <h2></h2>Username: <br>
-        <input type="text" name="username" placeholder="Username" /></body>
-        Password: <br>
-        <input type="password" name="password" placeholder="Password" /></br>
-        <input type="submit" class='btn' value="Login" />
+    <form method="POST" action="/login">
+        {% if message %}
+        <div class="message">{{ message }}</div>
+        {% endif %}
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        <input id="username" name="username" type="text" placeholder="Enter Your Username" class="textbox"/></br></br>
+        <input id="password" name="password" type="password" placeholder="Enter Your Password" class="textbox"/></br></br>
+        <button type="submit" class="btn form-control btn-default">Register</button>
     </form>
     <h1>{{message}}</h1>
 </body>
