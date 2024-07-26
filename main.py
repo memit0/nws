@@ -1,6 +1,8 @@
-from flask import Flask, render_template, jsonify, request, session, redirect, url_for
-from flask_mysqldb import MySQL
+from flask import Flask, render_template, jsonify, logging, request, session, redirect, url_for
+from flask_cors import CORS
 from flask_bcrypt import Bcrypt
+from flask_sqlalchemy import SQLAlchemy
+# from models import User, db
 import requests, re
 import MySQLdb.cursors
 from transformers import pipeline
@@ -8,11 +10,37 @@ from newspaper import Article
 import os
 
 app = Flask(__name__)
-bcrypt = Bcrypt(app)
-app.config['SECRET_KEY'] = 'your_secret_key'
+# app.config['SECRET_KEY'] = 'your_secret_key'
 
+# Configure your Flask app
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:///flaskdb.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'supersecretkey')  # Ensure this key is strong and secure
+
+# Enable CORS for requests including credentials
+CORS(app, supports_credentials=True)
+
+bcrypt = Bcrypt(app)
+db = SQLAlchemy(app)
 # Initialize the summarization pipeline
 summarizer = pipeline('summarization', model='facebook/bart-large-cnn', revision='main')
+
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'  # Example, update as needed
+app.config['SECRET_KEY'] = 'your_secret_key'
+
+db = SQLAlchemy(app)
+
+with app.app_context():
+    db.create_all()
+class user(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(150), nullable=False)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+
 
 # List of friendly news sources (example sources, replace with your actual list)
 friendly_sources = [
@@ -23,34 +51,35 @@ friendly_sources = [
     # Add other sources you have identified
 ]
 
-#MySQL Configuration
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'dbuserdbuser'
-app.config['MYSQL_DB'] = 'app_users'
 
-mysql = MySQL(app)
+# Check if user is logged in
+# @app.route('/check_session', methods=['GET'])
+# def check_session():
+#     if 'user_id' in session:
+#         return jsonify({'status': 'logged in'})
+#     return jsonify({'status': 'not logged in'})
 
 @app.route('/login', methods=['POST','GET'])
 def login():
-    if request.method=='POST' and 'username' in request.form and 'password' in request.form:
-        username = request.form['username']
-        password = request.form['password']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s', (username, password))
-        account = cursor.fetchone()
+    message=''
+    if request.method == 'POST':
+        # username = request.form.get('username')
+        # password = request.form.get('password')
 
-        if account:
-            session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
-            message = 'Logged in successfully'
-            return redirect(url_for('home'), message=message)
+        # account = user.query.filter_by(username=username).first()
+        username = user.query.filter_by(Email=request.form(['email'])).first()
+        password = user.query.filter_by(Password=request.form(['password'])).first()
+
+        if username and bcrypt.check_password_hash(user.password, password):
+            session['user_id'] = user.id
+            return render_template('login.html', success='Login successful.')
         else:
             return render_template('login.html', error='Invalid username or password.')
-    else:
-        return render_template('login.html')
-    
+        
+        # session['user_id'] = user.id
+
+    return render_template('login.html', success='Login successful.')
+
     # email = request[email]
     # password = request.form[password]
 
@@ -62,33 +91,33 @@ def login():
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-    message = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-        username = request.form['username']
-        password = request.form['password']
+    message=''
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        username= request.form.get('username')
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        email = request.form['email']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('INSERT INTO users(username, password) VALUES (%s, %s)', (username, password))
-        # mysql.connection.commit()
-        cursor.execute('SELECT * FROM users WHERE username = %s', (username, ))
-        account = cursor.fetchone()
+
+        
+        account = user.query.filter_by(email=email).first()
         if account:
-            message = 'Account already exists'
+            return render_template('register.html', message='Account already exists.') 
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            return render_template('register.html', error='Invalid email address')
+            return render_template('register.html', error='Invalid email address.')   
         elif not re.match(r'[A-Za-z0-9]+', username):
-            # return render_template('register.html', error='Username must contain only characters and numbers')
-            message = 'Username must contain only characters and numbers'
-        elif not username or not password or not email:
-            message = 'Please fill out the form'
-        else:
-            cursor.execuute('INSERT INTO users(username, password, email) VALUES (%s, %s, %s)', (username, hashed_password, email))
-            mysql.connection.commit()
-            message='You have successfully registered your account.'
-    elif request.method == 'POST':
-        message = 'Please fill out form.'
-    return render_template('register.html', message=message)
+            return render_template('register.html', error='Username must contain only characters and numbers.')
+        elif not email or not password or not username:
+            return render_template('register.html', error = 'Please enter all required fields.')
+        
+        new_user = user(email=email, username=username, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
+        
+        # session['user_id'] = new_user.id
+        return redirect(url_for('login', success='Account created successfully. Please log in.'))
+
+    return render_template('register.html')
+
 
 # Function to scrape full text and meta description of an article using newspaper3k
 def scrape_article_text(url):
@@ -202,4 +231,5 @@ def saved_articles():
     return render_template('saved_articles.html', articles=saved_articles)
 
 if __name__ == '__main__':
+    # db.create_all()
     app.run(debug=True)

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta> charset="UTF-8" >
+    <meta charset="UTF-8" >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <link
       rel="stylesheet"
@@ -19,15 +20,17 @@
     />
 </head>
 <body>
+    <div classname="login-page">
     <h1>Login</h1>
     <nav>
         <a href="/">Home</a> |
+        {% if session.logged_in %}
+        <a href="saved_articles">Saved Articles</a>
+        {% else %}
         <a href="login">Login</a> |
         <a href="register">Register</a>
+        {% endif %} 
     </nav>
-    {% if message %}
-    <p>{{ message }}</p>
-    {% endif %}
     <form method="POST" action="/login">
         {% if message %}
         <div class="message">{{ message }}</div>
@@ -35,10 +38,15 @@
         {% if error %}
         <div class="error">{{ error }}</div>
         {% endif %}
+        {% if session.logged_in %}
+        <div class="success">{{ success }}</div>
+        {% else %}
         <input id="username" name="username" type="text" placeholder="Enter Your Username" class="textbox"/></br></br>
         <input id="password" name="password" type="password" placeholder="Enter Your Password" class="textbox"/></br></br>
         <button type="submit" class="btn form-control btn-default">Login</button>
+        {% endif %}
     </form>
     <h1>{{message}}</h1>
+</div>
 </body>
 </html>
