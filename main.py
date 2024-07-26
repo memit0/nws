@@ -26,7 +26,7 @@ friendly_sources = [
 #MySQL Configuration
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'password'
+app.config['MYSQL_PASSWORD'] = 'dbuserdbuser'
 app.config['MYSQL_DB'] = 'app_users'
 
 mysql = MySQL(app)
