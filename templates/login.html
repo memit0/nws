@@ -41,6 +41,9 @@
         {% if session.logged_in %}
         <div class="success">{{ success }}</div>
         {% else %}
+        {% if regsuccess %}
+        <div class="success">{{ regsuccess }}</div>
+        {% endif %}
         <input id="username" name="username" type="text" placeholder="Enter Your Username" class="textbox"/></br></br>
         <input id="password" name="password" type="password" placeholder="Enter Your Password" class="textbox"/></br></br>
         <button type="submit" class="btn form-control btn-default">Login</button>

@@ -67,8 +67,8 @@ def login():
         # password = request.form.get('password')
 
         # account = user.query.filter_by(username=username).first()
-        username = user.query.filter_by(Email=request.form(['email'])).first()
-        password = user.query.filter_by(Password=request.form(['password'])).first()
+        username = user.query.filter_by(username=request.form['username']).first()
+        password = user.query.filter_by(Password=request.form['password']).first()
 
         if username and bcrypt.check_password_hash(user.password, password):
             session['user_id'] = user.id
@@ -114,7 +114,7 @@ def register():
         db.session.commit()
         
         # session['user_id'] = new_user.id
-        return redirect(url_for('login', success='Account created successfully. Please log in.'))
+        return redirect(url_for('login', regsuccess='Account created successfully. Please log in.'))
 
     return render_template('register.html')
 
