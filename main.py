@@ -63,16 +63,18 @@ friendly_sources = [
 def login():
     message=''
     if request.method == 'POST':
-        # username = request.form.get('username')
-        # password = request.form.get('password')
+        username_input = request.form.get('username')
+        password_input = request.form.get('password')
 
         # account = user.query.filter_by(username=username).first()
-        username = user.query.filter_by(username=request.form['username']).first()
-        password = user.query.filter_by(Password=request.form['password']).first()
+        account = user.query.filter_by(username=username_input).first()
+        # password = user.query.filter_by(Password=request.form['password']).first()
 
-        if username and bcrypt.check_password_hash(user.password, password):
-            session['user_id'] = user.id
-            return render_template('login.html', success='Login successful.')
+        if account and bcrypt.check_password_hash(account.password, password_input):
+            session['logged_in'] = True
+            session['user_id'] = account.id
+            # return render_template('login.html', success='Login successful.')
+            return redirect(url_for('saved_articles', success='Login successful.'))
         else:
             return render_template('login.html', error='Invalid username or password.')
         
@@ -217,7 +219,7 @@ def home():
 
 
 @app.route('/save_article', methods=['POST'])
-def save_article():
+def save_article(user_id):
     article = request.form.to_dict()
     if 'saved_articles' not in session:
         session['saved_articles'] = []
@@ -227,8 +229,15 @@ def save_article():
 
 @app.route('/saved_articles')
 def saved_articles():
-    saved_articles = session.get('saved_articles', [])
-    return render_template('saved_articles.html', articles=saved_articles)
+    if 'logged_in' in session and session['logged_in']:
+        # Fetch saved articles and render the template
+        articles = save_article(session['user_id'])
+        return render_template('saved_articles.html', articles=articles)
+    else:
+        return render_template('login.html', error='You must be logged in to view saved articles.')
+    
+    # saved_articles = session.get('saved_articles', [])
+    # return render_template('saved_articles.html', articles=saved_articles)
 
 if __name__ == '__main__':
     # db.create_all()

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Saved Articles</title>
@@ -13,57 +13,61 @@
       type="text/css"
       href="{{ url_for('static', filename='style.css') }}"
     />
-  </head>
-  <body>
+</head>
+<body>
     <nav>
-      <span class="logo">NWS</span>
-      <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="/saved_articles">Saved Articles</a>
-        {% if not session.logged_in %}
-        <a href="/login">Login</a>
-        <a href="/register">Register</a>
-        {% endif %}
-        {% if session.logged_in %}
-        <div class="search-container">
-          <span class="search-icon">&#128269;</span>
-          <form method="post" class="search-bar">
-            <input
-              type="text"
-              name="search_query"
-              placeholder="Search for news..."
-            />
-            <input type="submit" value="Search" />
-          </form>
+        <span class="logo">NWS</span>
+        <div class="nav-links">
+            {% if session.logged_in %}
+            <a href="/">Home</a>
+            <a href="/saved_articles">Saved Articles</a>
+            {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            {% endif %}
+            {% if session.logged_in %}
+            <div class="search-container">
+                <span class="search-icon">&#128269;</span>
+                <form method="post" class="search-bar">
+                    <input
+                      type="text"
+                      name="search_query"
+                      placeholder="Search for news..."
+                    />
+                    <input type="submit" value="Search" />
+                </form>
+            </div>
+            <span class="weather-info">
+                {{ weather.city_name }} | {{ weather.temp }}°F
+            </span>
+            {% endif %}
         </div>
-        <span class="weather-info">
-          {{ weather.city_name }} | {{ weather.temp }}°F
-        </span>
-      </div>
     </nav>
+    {% if session.logged_in %}
     <h1>Saved Articles</h1>
     <div class="container">
-      {% for article in articles %}
-      <div class="article">
-        <button
-          class="remove-article"
-          data-title="{{ article.title }}"
-          data-url="{{ article.url }}"
-        >
-          &#8211;
-        </button>
-        <h2 class="title">{{ article.title }}</h2>
-        <p class="summary">{{ article.summary }}</p>
-        <a class="url" href="{{ article.url }}" target="_blank"
-          >Read full article</a
-        >
-      </div>
-      {% endfor %}
+        {% for article in articles %}
+        <div class="article">
+            <button
+              class="remove-article"
+              data-title="{{ article.title }}"
+              data-url="{{ article.url }}"
+            >
+              &#8211;
+            </button>
+            <h2 class="title">{{ article.title }}</h2>
+            <p class="summary">{{ article.summary }}</p>
+            <a class="url" href="{{ article.url }}" target="_blank">
+              Read full article
+            </a>
+        </div>
+        {% endfor %}
     </div>
-    {% else %}
+    {% endif %}
+    {% if not session.logged_in %}
     <h2>You must be logged in to view saved articles.</h2>
     <p>Please <a href="/login">login</a> to access saved articles.</p>
     {% endif %}
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
-  </body>
+</body>
 </html>
