@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NWS</title>
+    <title>Politics</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
@@ -40,14 +40,10 @@
         </span>
       </div>
     </nav>
+    <h1>Politics</h1>
     <div class="container">
       {% for article in articles %}
       <div class="article">
-        <h2 class="title">{{ article.title }}</h2>
-        <p class="summary">{{ article.summary }}</p>
-        <a class="url" href="{{ article.url }}" target="_blank"
-          >Read full article</a
-        >
         <button
           class="bookmark"
           data-title="{{ article.title }}"
@@ -56,8 +52,12 @@
         >
           &#9733;
         </button>
+        <h2 class="title">{{ article.title }}</h2>
+        <p class="summary">{{ article.summary }}</p>
+        <a class="url" href="{{ article.url }}" target="_blank"
+          >Read full article</a
+        >
       </div>
-      <hr />
       {% endfor %}
     </div>
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
